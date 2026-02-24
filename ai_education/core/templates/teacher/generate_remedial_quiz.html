@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4 class="mb-4">Generate AI Quiz from Study Material</h4>
+
+<form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
+    {% csrf_token %}
+
+    <!-- Subject -->
+    <div class="mb-3">
+        <label for="subject" class="form-label">Subject</label>
+        <input type="text" id="subject" name="subject" class="form-control" required>
+    </div>
+
+    <!-- Class Section -->
+    <div class="mb-3">
+        <label for="class_section" class="form-label">Class Section</label>
+        <select id="class_section" name="class_section" class="form-select" required>
+            <option value="" selected disabled>Select Class Section</option>
+            {% for section in class_sections %}
+                <option value="{{ section.id }}">{{ section.name }} - Section {{ section.semester }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Syllabus File -->
+    <div class="mb-3">
+        <label for="syllabus_file" class="form-label">Syllabus File</label>
+        <input type="file" id="syllabus_file" name="syllabus_file" class="form-control" required>
+    </div>
+
+    <!-- Notes File -->
+    <div class="mb-3">
+        <label for="notes_file" class="form-label">Notes File</label>
+        <input type="file" id="notes_file" name="notes_file" class="form-control" required>
+    </div>
+
+    <!-- Past Questions File (Optional) -->
+    <div class="mb-3">
+        <label for="past_questions_file" class="form-label">Past Questions File (Optional)</label>
+        <input type="file" id="past_questions_file" name="past_questions_file" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Generate AI Quiz</button>
+</form>
+
+{% endblock %}

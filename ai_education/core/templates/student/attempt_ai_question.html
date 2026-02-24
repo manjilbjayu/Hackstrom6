@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>Attempt Question: {{ assignment.question.subject }}</h4>
+
+<form method="POST" class="card p-4 shadow-sm">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <p>{{ assignment.question.questions|linebreaks }}</p>
+    </div>
+
+    <div class="mb-3">
+        <label for="answer" class="form-label">Your Answer</label>
+        <textarea name="answer" id="answer" class="form-control" rows="2" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Answer</button>
+</form>
+
+{% endblock %}

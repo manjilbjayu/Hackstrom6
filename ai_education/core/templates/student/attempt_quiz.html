@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Attempt Quiz{% endblock %}
+
+{% block content %}
+<h3 class="mb-4">{{ assignment.quiz.subject }} Quiz</h3>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <!-- AI Generated Questions -->
+    {% for question in assignment.quiz.questions|json_script:"quiz_questions" %}
+        <div class="mb-3">
+            <label>{{ question.text }}</label>
+            <input type="text" class="form-control" name="answers_{{ forloop.counter }}" placeholder="Type your answer here">
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Submit Quiz</button>
+</form>
+{% endblock %}

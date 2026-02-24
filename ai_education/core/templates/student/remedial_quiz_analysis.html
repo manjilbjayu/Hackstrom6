@@ -1,0 +1,58 @@
+{% extends "student/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Remedial Quiz Analysis</h2>
+
+    {% if assignments %}
+        {% for assignment in assignments %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ assignment.question.subject }}</h5>
+                <p class="card-text"><strong>Question:</strong> {{ assignment.question.questions|linebreaks }}</p>
+                
+                <p>
+                    <strong>Your Answer:</strong>
+                    {% if assignment.student_answer %}
+                        {{ assignment.student_answer }}
+                    {% else %}
+                        <em>Not answered</em>
+                    {% endif %}
+                </p>
+
+                <p>
+                    <strong>Correct Answer:</strong>
+                    {% if assignment.question.correct_answer %}
+                        {{ assignment.question.correct_answer }}
+                    {% else %}
+                        <em>Not provided</em>
+                    {% endif %}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    {% if assignment.score is not None %}
+                        {% if assignment.score > 0 %}
+                            <span class="text-success">Correct</span>
+                        {% else %}
+                            <span class="text-danger">Incorrect</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="text-warning">Not evaluated</span>
+                    {% endif %}
+                </p>
+
+                {% if assignment.feedback %}
+                    <p><strong>Feedback:</strong> {{ assignment.feedback|linebreaks }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">No remedial quizzes have been submitted yet.</div>
+    {% endif %}
+
+    <a href="{% url 'student_dashboard' %}" class="btn btn-primary mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

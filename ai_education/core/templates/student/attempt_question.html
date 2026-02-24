@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>{{ assignment.question.subject }} - Question</h4>
+<p>{{ assignment.question.questions|truncatechars:100 }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label>Your Answer</label>
+        <textarea class="form-control" name="answer" rows="3">{{ assignment.student_answer }}</textarea>
+    </div>
+    <button class="btn btn-success">Submit Answer</button>
+</form>
+
+{% if assignment.is_submitted and assignment.question.correct_answer %}
+    <hr>
+    <p><strong>Correct Answer:</strong> {{ assignment.question.correct_answer }}</p>
+    <p><strong>Score:</strong> {{ assignment.score }}</p>
+{% endif %}
+
+{% endblock %}

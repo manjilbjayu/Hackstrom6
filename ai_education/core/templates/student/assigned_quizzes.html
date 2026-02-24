@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>Assigned Quizzes</h4>
+
+{% if assignments %}
+    <div class="list-group">
+        {% for assignment in assignments %}
+<div class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+        <strong>Quiz:</strong> {{ assignment.quiz.subject }} <br>
+        <small>Assigned by: {{ assignment.quiz.teacher.user.username }}</small>
+    </div>
+    <div>
+        {% if not assignment.is_submitted %}
+            <a href="{% url 'attempt_quiz' assignment.id %}" class="btn btn-primary btn-sm">Attempt</a>
+        {% else %}
+            <span class="badge bg-success">Submitted</span>
+            <br>
+            <small>Score: {{ assignment.score }}</small>
+            <br>
+            <a href="{% url 'student_view_quiz_pdf' assignment.id %}" class="btn btn-secondary btn-sm">Download PDF</a>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+    </div>
+{% else %}
+    <p>No quizzes assigned yet.</p>
+{% endif %}
+
+{% endblock %}

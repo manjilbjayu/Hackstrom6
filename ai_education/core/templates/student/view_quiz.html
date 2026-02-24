@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow p-4">
+
+        <h3 class="mb-3">View Quiz</h3>
+
+        {% if quiz %}
+            <div class="mb-3">
+                <strong>Subject:</strong> {{ quiz.subject }} <br>
+                <strong>Created On:</strong> {{ quiz.created_at }}
+            </div>
+
+            <hr>
+
+            <h5>Questions:</h5>
+            <p>{{ quiz.questions }}</p>
+
+            {% if quiz.correct_answer %}
+                <hr>
+                <h6>Correct Answer:</h6>
+                <p class="text-success">{{ quiz.correct_answer }}</p>
+            {% endif %}
+
+        {% else %}
+            <p>No quiz available.</p>
+        {% endif %}
+
+        <a href="{% url 'student_dashboard' %}" class="btn btn-secondary mt-3">
+            Back to Dashboard
+        </a>
+
+    </div>
+</div>
+{% endblock %}

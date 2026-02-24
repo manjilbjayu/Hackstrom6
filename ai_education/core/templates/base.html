@@ -1,0 +1,290 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{% block title %}AI Education{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* ================= BODY ================= */
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        /* Vibrant gradient background */
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: #fff;
+      }
+
+      .messages p {
+        margin: 0.5rem 0;
+      }
+
+      /* ================= NAVBAR ================= */
+      .navbar {
+        background: black;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .navbar-brand {
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .navbar-brand small {
+        display: block;
+        font-size: 0.75rem;
+        color: #ffe4e1;
+        font-weight: 400;
+      }
+
+      .navbar-nav .nav-link {
+        color: #fff;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-right: 5px;
+      }
+
+      .navbar-nav .nav-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #fff;
+        transform: translateY(-2px);
+      }
+
+      .navbar-nav .nav-link.active {
+        background: linear-gradient(45deg, #ffd700, #ff8c00);
+        color: #1e1b4b;
+        font-weight: 600;
+        border-radius: 10px;
+        box-shadow: 0 6px 15px rgba(255, 215, 0, 0.4);
+      }
+
+      /* Button Styling */
+      .btn-danger {
+        background: #ff416c;
+        border: none;
+        color: #fff; /* Make text visible */
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px; /* Space between icon and text */
+      }
+
+      .btn-danger:hover {
+        background: #ff4b2b;
+      }
+
+      /* ================= SIDEBAR (if still used) ================= */
+      .sidebar {
+        min-height: 100vh;
+        background: linear-gradient(180deg, #6a11cb, #2575fc);
+        padding: 25px 15px;
+      }
+
+      /* BRAND SECTION */
+      .brand {
+        text-align: center;
+        margin-bottom: 35px;
+      }
+
+      .brand h4 {
+        color: #ffffff;
+        font-weight: 700;
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: 0.5px;
+      }
+
+      .brand small {
+        color: #c7d2fe;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+
+      /* MENU LINKS */
+      .menu-link {
+        display: block;
+        color: #e0e7ff;
+        padding: 12px 18px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 14.5px;
+        transition: all 0.3s ease;
+      }
+
+      /* Hover Effect */
+      .menu-link:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        transform: translateX(4px);
+      }
+
+      /* Active Link */
+      .menu-link.active {
+        background: linear-gradient(135deg, #ffd700, #ff8c00);
+        color: #1e1b4b;
+        font-weight: 500;
+        box-shadow: 0 6px 15px rgba(255, 215, 0, 0.4);
+      }
+
+      /* LOGOUT SECTION */
+      .logout-section {
+        padding-top: 15px;
+      }
+
+      .logout-btn {
+        display: block;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #ff416c, #ff4b2b);
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: 0.3s ease;
+      }
+
+      .logout-btn:hover {
+        background: linear-gradient(90deg, #ff4b2b, #ff416c);
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ================= TOP NAVBAR ================= -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <div class="container-fluid">
+        <!-- BRAND -->
+        <a class="navbar-brand" href="#">
+          AI Remedial <small>Learning System</small>
+        </a>
+
+        <!-- HAMBURGER TOGGLE -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- NAV LINKS -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto">
+            {% if user.teacher %}
+            <!-- Teacher Links -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'teacher_dashboard' %}active{% endif %}"
+                href="{% url 'teacher_dashboard' %}"
+                >Dashboard</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'upload_marks' %}active{% endif %}"
+                href="{% url 'upload_marks' %}"
+                >Upload Results</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'generate_quiz' %}active{% endif %}"
+                href="{% url 'generate_quiz' %}"
+                >Generate Quiz</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'generate_question' %}active{% endif %}"
+                href="{% url 'generate_question' %}"
+                >Generate Question</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'assign_remedial_quiz' %}active{% endif %}"
+                href="{% url 'assign_remedial_quiz' %}"
+                >Assign Remedial Quiz</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'performance_report' %}active{% endif %}"
+                href="{% url 'performance_report' %}"
+                >Performance Report</a
+              >
+            </li>
+            {% endif %} {% if user.student %}
+            <!-- Student Links -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}"
+                href="{% url 'student_dashboard' %}"
+                >Dashboard</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'assigned_quizes' %}active{% endif %}"
+                href="{% url 'assigned_quizes' %}"
+                >Assigned Quiz</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'student_assigned_questions' %}active{% endif %}"
+                href="{% url 'student_assigned_questions' %}"
+                >Assigned Questions</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'analysis' %}active{% endif %}"
+                href="{% url 'analysis' %}"
+                >Performance Analysis</a
+              >
+            </li>
+            {% endif %} {% if user.is_authenticated %}
+            <li class="nav-item ms-2">
+              <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ================= PAGE CONTENT ================= -->
+    <div class="container-fluid p-4">
+      {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+        <p class="text-{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+      {% endif %} {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

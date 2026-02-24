@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Student Performance Report</h2>
+
+    {% if quizzes %}
+        {% for quiz in quizzes %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <strong>Quiz: </strong>{{ quiz.subject }} |
+                    <strong>Created At: </strong>{{ quiz.created_at|date:"M d, Y H:i" }}
+                </div>
+                <div class="card-body">
+                    {% if quiz.quizassignment_set.exists %}
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Score</th>
+                                    <th>Feedback</th>
+                                    <th>Submitted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for assignment in quiz.quizassignment_set.all %}
+                                    <tr>
+                                        <td>{{ assignment.student.full_name }}</td>
+                                        <td>{{ assignment.score|default:"N/A" }}</td>
+                                        <td>{{ assignment.feedback|default:"N/A" }}</td>
+                                        <td>{{ assignment.is_submitted|yesno:"Yes,No" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>No students assigned for this quiz yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center">No quizzes found.</p>
+    {% endif %}
+
+    {% if predictions %}
+    <div class="mt-4">
+        <h5>Predicted Future Performance</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Predicted %</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in predictions %}
+                <tr>
+                    <td>{{ p.student.full_name }}</td>
+                    <td>{{ p.predicted_percentage|default:"-" }}</td>
+                    <td>{{ p.predicted_status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

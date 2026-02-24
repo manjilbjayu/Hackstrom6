@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow p-4">
+
+        <h3 class="mb-3">Performance Analysis</h3>
+
+        {% if analysis %}
+            <div class="alert alert-info">
+                {{ analysis }}
+            </div>
+        {% else %}
+            <p>No analysis available.</p>
+        {% endif %}
+
+        <a href="{% url 'student_dashboard' %}" class="btn btn-primary mt-3">
+            Back to Dashboard
+        </a>
+
+    </div>
+</div>
+{% endblock %}

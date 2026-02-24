@@ -1,0 +1,44 @@
+{% extends "teacher/dashboard.html" %} {% load static %} {% block content %}
+<div class="container mt-5">
+  <h2>Assign Remedial Quiz</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="class_section" class="form-label">Class Section</label>
+      <select
+        name="class_section"
+        id="class_section"
+        class="form-control"
+        required
+      >
+        <option value="">Select Section</option>
+        {% for section in sections %}
+        <option value="{{ section.id }}">
+          {{ section.name }} (Section {{ section.semester }})
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="subject" class="form-label">Subject</label>
+      <input
+        type="text"
+        name="subject"
+        id="subject"
+        class="form-control"
+        placeholder="Enter Subject"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Assign Quiz</button>
+  </form>
+
+  <a href="{% url 'teacher_dashboard' %}" class="btn btn-secondary mt-3"
+    >Back to Dashboard</a
+  >
+</div>
+{% endblock %}

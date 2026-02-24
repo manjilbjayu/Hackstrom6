@@ -1,0 +1,135 @@
+{% extends 'base.html' %} {% block title %}Teacher Dashboard{% endblock %}
+{% block content %}
+
+<!-- Font Awesome CDN -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Teacher Dashboard</h2>
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <p class="text-{{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="row g-4">
+    <!-- Profile Card -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-primary h-100">
+        <div class="card-body text-center">
+          <div class="mb-3">
+            <i class="fa-solid fa-user-circle fa-5x text-primary"></i>
+          </div>
+
+          <h5 class="card-title">{{ request.user.username }}</h5>
+          <p class="mb-1">
+            <strong>Department:</strong> {{ request.user.teacher.department }}
+          </p>
+          <p class="mb-3">
+            <strong>Designation:</strong> {{ request.user.teacher.designation }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Management Section -->
+    <div class="col-md-8">
+      <div class="card shadow-sm border-success h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title mb-3">
+            <i class="fa-solid fa-chalkboard-user"></i> Student Management
+          </h5>
+
+          <div class="d-grid gap-3 mt-3">
+            <a href="{% url 'upload_marks' %}" class="btn btn-primary btn-lg">
+              <i class="fa-solid fa-file-upload"></i> Add Student Marks
+            </a>
+
+            <a href="{% url 'generate_quiz' %}" class="btn btn-warning btn-lg">
+              <i class="fa-solid fa-robot"></i> Generate Quiz
+            </a>
+
+            <a href="{% url 'generate_question' %}" class="btn btn-info btn-lg">
+              <i class="fa-solid fa-question-circle"></i> Generate Question
+            </a>
+
+            <a
+              href="{% url 'performance_report' %}"
+              class="btn btn-secondary btn-lg"
+            >
+              <i class="fa-solid fa-chart-line"></i> Performance Report
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% for assignment in quiz_assignments %}
+    <li class="list-group-item">
+
+        <h6>{{ assignment.question.subject }}</h6>
+        <small>Assigned by: {{ assignment.question.teacher.user.username }}</small>
+
+        <!-- Display all MCQ questions -->
+        <ol>
+            {% for mcq in assignment.question.questions.all %}
+                <li>
+                    {{ mcq.question_text }}
+                    <ul>
+                        <li>A) {{ mcq.option_a }}</li>
+                        <li>B) {{ mcq.option_b }}</li>
+                        <li>C) {{ mcq.option_c }}</li>
+                        <li>D) {{ mcq.option_d }}</li>
+                    </ul>
+                </li>
+            {% endfor %}
+        </ol>
+
+        <!-- Submit / Score -->
+        {% if not assignment.is_submitted %}
+            <a href="{% url 'attempt_quiz' assignment.id %}" class="btn btn-sm btn-primary">
+                Attempt Quiz
+            </a>
+        {% else %}
+            <span class="badge bg-success">Submitted</span>
+            <div>Score: {{ assignment.score|default:"0" }}</div>
+        {% endif %}
+    </li>
+{% endfor %}
+    {% for quiz in quizzes %}
+<div class="card shadow-sm mb-3 p-3">
+    <h5>{{ quiz.subject }} ({{ quiz.class_section.name }})</h5>
+    <p><strong>Created by:</strong> {{ quiz.teacher.user.username }}</p>
+
+    <ol>
+        {% for item in quiz_previews %}
+<div class="card shadow-sm mb-3 p-3">
+    <h5>{{ item.quiz.subject }} ({{ item.quiz.class_section.name }})</h5>
+    <p><strong>Created by:</strong> {{ item.quiz.teacher.user.username }}</p>
+
+    {% if item.questions_list %}
+    <ol>
+        {% for q in item.questions_list %}
+            <li>{{ q }}</li>
+        {% endfor %}
+    </ol>
+    {% endif %}
+
+    <a href="{% url 'view_quiz_pdf' item.quiz.id %}" class="btn btn-secondary btn-sm">Download PDF</a>
+</div>
+{% empty %}
+<p>No quizzes created yet.</p>
+{% endfor %}
+    </ol>
+
+    <a href="{% url 'view_quiz_pdf' quiz.id %}" class="btn btn-secondary btn-sm">Download PDF</a>
+</div>
+{% empty %}
+<p>No quizzes created yet.</p>
+{% endfor %}
+  </div>
+</div>
+{% endblock %}

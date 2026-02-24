@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4>Assigned Questions</h4>
+
+{% if assignments %}
+    <ul class="list-group">
+        {% for assign in assignments %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ assign.question.subject }}</strong><br>
+                    {{ assign.question.question_text }}
+                </div>
+                <div>
+                    <a href="{% url 'attempt_question' assign.id %}" class="btn btn-primary btn-sm">Answer</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No questions assigned yet.</p>
+{% endif %}
+
+{% endblock %}
